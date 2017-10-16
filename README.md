@@ -12,7 +12,7 @@ Por ejemplo, para donar $10 a Animales sin Hogar, envía un SMS con la palabra A
 
 # Desarrolladores
 
- - @MartinG, Martin Giannechini
+ - [@MartinGian](https://github.com/MartinGian), Martin Giannechini
  - [@fabrii](https://github.com/fabrii), Fabricio Gregorio
  
  # License
