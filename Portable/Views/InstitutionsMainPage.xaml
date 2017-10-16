@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+            xmlns="http://xamarin.com/schemas/2014/forms" 
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="dona.Forms.Views.InstitutionsMainPage"
+            xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+            x:Name="MainPage"
+            Title="Doná">
+    <ContentPage.Content>
+        <ListView x:Name="InstitutionsList" 
+                  SeparatorVisibility="None" 
+                  RowHeight="130" 
+                  ItemsSource="{Binding Institutions}"
+                  IsPullToRefreshEnabled="true"
+                  IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                  RefreshCommand="{Binding LoadInstitutions}"
+                  CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Margin="0,0,0,1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ffimageloading:CachedImage
+                                Grid.RowSpan="2"
+                                VerticalOptions="Start"
+                                Aspect="AspectFill"  HeightRequest="150"
+                                DownsampleHeight="150"
+                                Source = "{Binding CoverSource}">
+                                <ffimageloading:CachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding BindingContext.InstitutionSelected, Source={x:Reference MainPage}}"
+                                        CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                </ffimageloading:CachedImage.GestureRecognizers>
+                            </ffimageloading:CachedImage>
+
+                            <StackLayout Grid.Row="1" BackgroundColor="#99000000" Padding="5">
+                                <Label TextColor="White" Text="{Binding Name}" FontSize="16"></Label>
+                            </StackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

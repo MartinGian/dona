@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:converters="clr-namespace:dona.Forms.Converters;assembly=dona.Forms"
+             x:Class="dona.Forms.Views.InstitutionDetailsPage"
+	         xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             Title="{Binding Institution.Name}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"></converters:InverseBooleanConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <!--Portait picture of institution-->
+            <ffimageloading:CachedImage
+                    VerticalOptions="Start"
+                    Aspect="AspectFill"  HeightRequest="150"
+                    DownsampleHeight="150"
+                    Source = "{Binding Institution.CoverSource}">
+            </ffimageloading:CachedImage>
+
+            <StackLayout Margin="5, 0, 5, 5" 
+                         VerticalOptions="FillAndExpand" 
+                         HorizontalOptions="FillAndExpand">
+
+                <!--Set donation panel-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+
+                    <!--Substract to donation button-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                        <Button Text="{Binding SubstractFromDonationAmountFormatted}" Command="{Binding SubstractFromDonationAmount}" HorizontalOptions="Center" VerticalOptions="Center"></Button>
+                    </StackLayout>
+
+                    <!--Donation from credit is available-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Text="Consultando.." FontSize="Micro"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsGettingCredit}"></Label>
+                        <Button Text="Consultar saldo" Command="{Binding GetCredit}" FontSize="10" IsVisible="{Binding CreditButtonVisible}" HorizontalOptions="Center"></Button>
+                        <Label Text="{Binding Credit.FormattedCredit}" FontSize="Small"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsVisible="{Binding CreditLabelVisible}"></Label>
+                    </StackLayout>
+
+                    <!--Add to donation button-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                        <Button Text="{Binding AddToDonationAmountFormatted}" Command="{Binding AddToDonationAmount}" HorizontalOptions="Center" VerticalOptions="Center"></Button>
+                    </StackLayout>
+                </StackLayout>
+
+                <Label FontSize="10" 
+                       Margin="5" 
+                       Text="Las donaciones a esta institución no se descuentan de tu saldo, serán agregadas como valor agregado en tu factura."
+                       VerticalOptions="Center"
+                       IsVisible="{Binding Institution.DonationInformation.DiscountsDonationFromCredit, Converter={StaticResource InverseBooleanConverter}}"></Label>
+
+                <!--Institution presentation-->
+                <ScrollView VerticalOptions="FillAndExpand" 
+                            HorizontalOptions="FillAndExpand"
+                            Orientation="Vertical" 
+                            BackgroundColor="White" 
+                            Padding="5, 0, 5, 0">
+                    <Label Text="{Binding Institution.Presentation}" Margin="10, 10, 10, 0" />
+                </ScrollView>
+
+                <StackLayout Orientation="Vertical" VerticalOptions="End">
+                    <Button Text="{Binding DonateBtnText}" BackgroundColor="#028ddd" TextColor="WhiteSmoke" Command="{Binding Donate}" />
+                </StackLayout>
+
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

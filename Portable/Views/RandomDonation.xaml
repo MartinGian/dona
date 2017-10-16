@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:converters="clr-namespace:dona.Forms.Converters;assembly=dona.Forms"
+             x:Class="dona.Forms.Views.RandomDonation"
+             Title="Donación aleatoria">
+    <!--BackgroundImage="background.png">-->
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"></converters:InverseBooleanConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout>
+
+            <StackLayout Margin="5, 2, 5, 5" 
+                         VerticalOptions="FillAndExpand" 
+                         HorizontalOptions="FillAndExpand">
+
+                <!--Set donation panel-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+
+                    <!--Substract to donation button-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                        <Button Text="{Binding SubstractFromDonationAmountFormatted}" Command="{Binding SubstractFromDonationAmount}" HorizontalOptions="Center" VerticalOptions="Center"></Button>
+                    </StackLayout>
+
+                    <!--Donation from credit is available-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Text="Consultando.." FontSize="Micro"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsGettingCredit}"></Label>
+                        <Button Text="Consultar saldo" Command="{Binding GetCredit}" FontSize="10" IsVisible="{Binding CreditButtonVisible}" HorizontalOptions="Center"></Button>
+                        <Label Text="{Binding Credit.FormattedCredit}" FontSize="Small"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsVisible="{Binding CreditLabelVisible}"></Label>
+                    </StackLayout>
+
+                    <!--Add to donation button-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                        <Button Text="{Binding AddToDonationAmountFormatted}" Command="{Binding AddToDonationAmount}" HorizontalOptions="Center" VerticalOptions="Center"></Button>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
+                    <Switch IsToggled="{Binding OnlyDiscountsDonationFromCredit}" VerticalOptions="Center"/>
+                    <Label Text="Solo descontar del saldo" VerticalOptions="Center" />
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="FillAndExpand" IsVisible="{Binding OnlyDiscountsDonationFromCredit, Converter={StaticResource InverseBooleanConverter}}">
+                    <Label HorizontalOptions="CenterAndExpand" FontSize="10" Margin="0" Text="(*) Donaciones que se cargarán en su factura como valor agregado"></Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+                    <Button Text="{Binding GenerarDonacionFormatted}" BackgroundColor="#002a46" TextColor="WhiteSmoke" Command="{Binding GenerateDonation}" />
+                </StackLayout>
+
+                <ListView x:Name="InstitutionsList"
+                  SeparatorVisibility="Default"
+                  HasUnevenRows="true"
+                  ItemsSource="{Binding RandomInstitutions}"
+                  Margin="0, 10, 0, 0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                                    <Label HorizontalOptions="StartAndExpand" VerticalTextAlignment="Center" Text="{Binding FormattedName}" FontSize="Small"/>
+                                    <Label HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" Text="{Binding FormattedAmount}" FontSize="Small"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackLayout Orientation="Vertical" VerticalOptions="End">
+                    <Button Text="{Binding DonationAmountFormatted}" BackgroundColor="#028ddd" TextColor="WhiteSmoke" Command="{Binding Donate}" />
+                </StackLayout>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

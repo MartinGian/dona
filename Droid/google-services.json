@@ -1,0 +1,104 @@
+{
+  "project_info": {
+    "project_number": "615758445338",
+    "firebase_url": "https://dona-176a3.firebaseio.com",
+    "project_id": "dona-176a3",
+    "storage_bucket": "dona-176a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615758445338:android:a9321bb74c6ce9c9",
+        "android_client_info": {
+          "package_name": "com.home.dona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615758445338-ve32sumbftfea5dbhsq4mb96v145g74k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgGmusC06mS_9eI2Wu827JKcWpeMUazrc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615758445338:android:11b6178734514e7f",
+        "android_client_info": {
+          "package_name": "com.home.fb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615758445338-ve32sumbftfea5dbhsq4mb96v145g74k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgGmusC06mS_9eI2Wu827JKcWpeMUazrc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615758445338:android:01b604e9c941c0ca",
+        "android_client_info": {
+          "package_name": "com.uy.dona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615758445338-ve32sumbftfea5dbhsq4mb96v145g74k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgGmusC06mS_9eI2Wu827JKcWpeMUazrc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

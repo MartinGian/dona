@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="dona.Forms.Views.DonationResultPage"
+             NavigationPage.HasBackButton="False"
+             BackgroundImage="resultsbackground.png"
+             Title="¡Gracias!">
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <!--Empty row, just for margin-->
+                <RowDefinition Height="70*"></RowDefinition>
+
+                <RowDefinition Height="35*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="1"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand">
+                <ScrollView 
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        Orientation="Vertical"
+                        BackgroundColor="Transparent"
+                        Padding="5, 0, 5, 0">
+                    <Label Text="{Binding DonationMessage}" HorizontalOptions="CenterAndExpand"></Label>
+                </ScrollView>
+
+                <Label HorizontalOptions="CenterAndExpand" 
+                       VerticalOptions="End" 
+                       Text="Chequea que recibas el SMS de confirmación de tus donaciones" 
+                       FontSize="Micro" 
+                       Margin="0, 5, 0, 5">
+                </Label>
+            </StackLayout>
+
+            <Button Text="Compartir" Command="{Binding Publish}" IsVisible="{Binding ShareButtonVisible}" BackgroundColor="#002a46" TextColor="WhiteSmoke" HorizontalOptions="Center" Grid.Row="2"></Button>
+            <Button Text="Volver" VerticalOptions="End" HorizontalOptions="FillAndExpand" Command="{Binding GoToHomePage}" BackgroundColor="#028ddd" TextColor="WhiteSmoke" Grid.Row="3" Margin="5, 0, 5, 5"></Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
