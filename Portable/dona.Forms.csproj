@@ -41,6 +41,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\CachedImageCell.cs" />
     <Compile Include="Common\InstitutionsComprarer.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />

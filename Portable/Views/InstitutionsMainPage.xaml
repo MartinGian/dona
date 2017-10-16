@@ -4,6 +4,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             x:Class="dona.Forms.Views.InstitutionsMainPage"
             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+            xmlns:common="clr-namespace:dona.Forms.Common;assembly=dona.Forms"
             x:Name="MainPage"
             Title="Doná">
     <ContentPage.Content>
@@ -17,18 +18,20 @@
                   CachingStrategy="RecycleElement">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
+                    <common:CachedImageCell>
                         <Grid Margin="0,0,0,1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
+                            
+                            <!--the Source of CachedImage is set in CachedImageCell-->
                             <ffimageloading:CachedImage
                                 Grid.RowSpan="2"
                                 VerticalOptions="Start"
-                                Aspect="AspectFill"  HeightRequest="150"
-                                DownsampleHeight="150"
-                                Source = "{Binding CoverSource}">
+                                Aspect="AspectFill"  
+                                HeightRequest="150"
+                                DownsampleHeight="150">
                                 <ffimageloading:CachedImage.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Command="{Binding BindingContext.InstitutionSelected, Source={x:Reference MainPage}}"
@@ -40,7 +43,7 @@
                                 <Label TextColor="White" Text="{Binding Name}" FontSize="16"></Label>
                             </StackLayout>
                         </Grid>
-                    </ViewCell>
+                    </common:CachedImageCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
