@@ -23,10 +23,13 @@ namespace dona.Forms.Views
         {
             base.OnAppearing();
 
-            if (BindingContext is RandomDonationPageViewModel vm)
+            Task.Run(() =>
             {
-                vm.GenerateDonation.Execute(null);
-            }
+                if (BindingContext is RandomDonationPageViewModel vm)
+                {
+                    vm.GenerateDonation.Execute(null);
+                }
+            });
 
         }
     }

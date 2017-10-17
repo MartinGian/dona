@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -7,12 +9,12 @@ using dona.Forms.Model;
 using dona.Forms.Services;
 using dona.Forms.Views;
 using Xamarin.Forms;
+using dona.Forms.Helpers;
 
 namespace dona.Forms.ViewModels
 {
     public class InstitutionsMainPageViewModel : INotifyPropertyChanged
     {
-        public static InstitutionsMainPageViewModel Instance = new InstitutionsMainPageViewModel();
         private readonly IInstitutionsService _institutionsService;
 
         private IList<Institution> _institutions;
@@ -40,6 +42,8 @@ namespace dona.Forms.ViewModels
             }
         }
 
+        // Singleton implementation
+        public static InstitutionsMainPageViewModel Instance = new InstitutionsMainPageViewModel();
         private InstitutionsMainPageViewModel()
         {
             _institutionsService = InstitutionsService.Instance;
@@ -48,9 +52,12 @@ namespace dona.Forms.ViewModels
             Institutions = new List<Institution>();
         }
 
-        public void InitializeInstitutionsFromLocal()
+        public void InitializeInstitutionsFromLocalAsync()
         {
-            Institutions = _institutionsService.GetInstitutionsFromLocal();
+            if (Institutions == null || !Institutions.Any())
+            {
+                UiHelper.InvokeOnTheMainThread(async () => Institutions = await _institutionsService.GetInstitutionsFromLocalAsync());
+            }
         }
 
         private static async Task InstitutionSelected_Handler(object param)
@@ -70,7 +77,7 @@ namespace dona.Forms.ViewModels
                 try
                 {
                     var institutions = await Task.Run(async () => await _institutionsService.SyncAndGetInstitutions());
-                    Institutions = institutions;
+                    UiHelper.InvokeOnTheMainThread(() => Institutions = institutions);
                 }
                 finally
                 {

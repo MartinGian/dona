@@ -9,6 +9,7 @@ using dona.Forms.Model;
 using dona.Forms.Services;
 using dona.Forms.Views;
 using Xamarin.Forms;
+using dona.Forms.Helpers;
 
 namespace dona.Forms.ViewModels
 {
@@ -192,17 +193,12 @@ namespace dona.Forms.ViewModels
 
         private async Task Donate_Handler()
         {
+            IsDonating = true;
+            Donate.ChangeCanExecute();
 
-            var ok = await UserDialogs.Instance.ConfirmAsync(
-                $"Está a punto de realizar una donación de ${GeneratedDonationAmount}.", "Confirmar donación", "Donar", "Cancelar");
-
+            var ok = await UserDialogs.Instance.ConfirmAsync($"Está a punto de realizar una donación de ${GeneratedDonationAmount}.", "Confirmar donación", "Donar", "Cancelar");
             if (ok)
             {
-
-                IsDonating = true;
-                Donate.ChangeCanExecute();
-                
-
                 try
                 {
                     var donationResult = await _donationsService.DonateInstitutionsAsync(_randomInstitutions);
@@ -225,22 +221,25 @@ namespace dona.Forms.ViewModels
                     Donate.ChangeCanExecute();
                 }
             }
+            else
+            {
+                IsDonating = false;
+                Donate.ChangeCanExecute();
+            }
         }
 
         private void Generate_Donation_Handler()
         {
-
-            UserDialogs.Instance.ShowLoading("Estamos generando su donación", MaskType.Black);
-
             try
             {
-                GeneratedDonationAmount = DonationAmount;
-                RandomInstitutions = _institutionsService.GetRandomInstitutionList(_minCommonDonationAmount, _donationAmount, _onlyDiscountsDonationFromCredit);
-                UserDialogs.Instance.HideLoading();
+                UiHelper.InvokeOnTheMainThread(async () =>
+                {
+                    GeneratedDonationAmount = DonationAmount;
+                    RandomInstitutions = await _institutionsService.GetRandomInstitutionListAsync(_minCommonDonationAmount, _donationAmount, _onlyDiscountsDonationFromCredit);
+                });
             }
             catch (Exception)
             {
-                UserDialogs.Instance.HideLoading();
                 UserDialogs.Instance.ShowError("Error al generar su donación, vuelva a intentarlo");
             }
         }

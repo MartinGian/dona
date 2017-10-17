@@ -62,7 +62,7 @@
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
-                                    <Label HorizontalOptions="StartAndExpand" VerticalTextAlignment="Center" Text="{Binding FormattedName}" FontSize="Small"/>
+                                    <Label HorizontalOptions="Start" VerticalTextAlignment="Center" Text="{Binding FormattedName}" FontSize="Small"/>
                                     <Label HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" Text="{Binding FormattedAmount}" FontSize="Small"/>
                                 </StackLayout>
                             </ViewCell>

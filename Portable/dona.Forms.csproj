@@ -49,6 +49,7 @@
     <Compile Include="Events\CreditInformationReceivedEvent.cs" />
     <Compile Include="Exceptions\CannotSendSmsException.cs" />
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Model\Credit.cs" />
     <Compile Include="Model\DonationResult.cs" />
     <Compile Include="Model\InstitutionDonationInformation.cs" />

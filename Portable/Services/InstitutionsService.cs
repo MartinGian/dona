@@ -11,8 +11,8 @@ namespace dona.Forms.Services
     public interface IInstitutionsService
     {
         Task<IList<Institution>> SyncAndGetInstitutions();
-        IList<Institution> GetInstitutionsFromLocal();
-        IList<RandomInstitution> GetRandomInstitutionList(int minimumCommonDonation, int donationAmount, bool onlyDiscountsDonationFromCredit);
+        Task<IList<Institution>> GetInstitutionsFromLocalAsync();
+        Task<IList<RandomInstitution>> GetRandomInstitutionListAsync(int minimumCommonDonation, int donationAmount, bool onlyDiscountsDonationFromCredit);
     }
 
     public class InstitutionsService : IInstitutionsService
@@ -30,20 +30,20 @@ namespace dona.Forms.Services
             if (DateTime.UtcNow - RemoteDataService.DateOfLastTimeInstitutionsUpdate > TimeSpan.FromHours(1))
                 await RemoteDataService.SyncInstitutions();
 
-            return GetInstitutionsFromLocal();
+            return await GetInstitutionsFromLocalAsync();
         }
 
-        public IList<Institution> GetInstitutionsFromLocal()
+        public async Task<IList<Institution>> GetInstitutionsFromLocalAsync()
         {
-            var remoteInstitutions = RemoteDataService.GetInstitutions();
+            var remoteInstitutions = await RemoteDataService.GetCachedInstitutionsAsync();
             var institutions = MapRemoteInstitutions(remoteInstitutions);
             institutions.Sort(new InstitutionsComprarer());
             return institutions;
         }
 
-        public IList<RandomInstitution> GetRandomInstitutionList(int minimumCommonDonation, int donationAmount, bool onlyDiscountsDonationFromCredit)
+        public async Task<IList<RandomInstitution>> GetRandomInstitutionListAsync(int minimumCommonDonation, int donationAmount, bool onlyDiscountsDonationFromCredit)
         {
-            var filteredInstitutions = GetInstitutionsFromLocal();
+            var filteredInstitutions = await GetInstitutionsFromLocalAsync();
             if (onlyDiscountsDonationFromCredit)
             {
                 filteredInstitutions = filteredInstitutions.Where(institution => institution.DonationInformation.DiscountsDonationFromCredit).ToList();
@@ -119,6 +119,9 @@ namespace dona.Forms.Services
             return institution;
         }
 
-        private static List<Institution> MapRemoteInstitutions(IEnumerable<RemoteInstitution> remoteInstitutions) => remoteInstitutions.Select(MapRemoteInstitution).ToList();
+        private static List<Institution> MapRemoteInstitutions(IEnumerable<RemoteInstitution> remoteInstitutions)
+        {
+            return remoteInstitutions.Select(MapRemoteInstitution).ToList();
+        }
     }
 }

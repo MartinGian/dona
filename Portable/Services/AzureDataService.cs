@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using dona.Forms.Model;
 using Microsoft.WindowsAzure.MobileServices;
@@ -20,18 +17,16 @@ namespace dona.Forms.Services
 
         Task Initialize();
         Task SyncInstitutions();
-        IList<RemoteInstitution> GetInstitutions();
+        Task<List<RemoteInstitution>> GetCachedInstitutionsAsync();
     }
 
     public class AzureDataService : IRemoteDataService
     {
         private const string DbPath = "syncstore.db";
-        private IMobileServiceSyncTable<RemoteInstitution> _institutionsRemoteTable;
-        private MobileServiceClient MobileService { get; set; }
+        private const string AzurePath = "http://dona-uy.azurewebsites.net";
 
-        public static AzureDataService Instance = new AzureDataService();
-        private static IList<RemoteInstitution> _remoteInstitutionsCache;
-
+        private static IMobileServiceSyncTable<RemoteInstitution> _institutionsRemoteTable;
+        private static MobileServiceClient MobileService { get; set; }
         private static ISettings AppSettings => CrossSettings.Current;
 
         public DateTime DateOfLastTimeInstitutionsUpdate
@@ -40,42 +35,48 @@ namespace dona.Forms.Services
             set => AppSettings.AddOrUpdateValue("LastTimeInstitutionsUpdate", value);
         }
 
-        // Singleton
+        // Singleton implementation
+        public static AzureDataService Instance = new AzureDataService();
         private AzureDataService() { }
 
         public async Task Initialize()
         {
-            if (MobileService?.SyncContext?.IsInitialized ?? false) return;
+            if (!MobileService?.SyncContext?.IsInitialized ?? true)
+                MobileService = new MobileServiceClient(AzurePath);
 
-            // create the client
-            MobileService = new MobileServiceClient("http://dona-uy.azurewebsites.net");
+            if (_institutionsRemoteTable == null)
+            {
+                // setup the local sqlite store and intialize the institutions table
+                var store = new MobileServiceSQLiteStore(DbPath);
+                store.DefineTable<RemoteInstitution>();
+                await MobileService.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler());
 
-            // setup the local sqlite store and intialize the institutions table
-            var store = new MobileServiceSQLiteStore(DbPath);
-            store.DefineTable<RemoteInstitution>();
-            await MobileService.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler());
-
-            // get the sync table that will call out to azure
-            _institutionsRemoteTable = MobileService.GetSyncTable<RemoteInstitution>();
-            _remoteInstitutionsCache = await _institutionsRemoteTable.ToListAsync();
+                // get the sync table that will call out to azure
+                _institutionsRemoteTable = MobileService.GetSyncTable<RemoteInstitution>();
+            }
         }
 
         public async Task SyncInstitutions()
         {
             if (CrossConnectivity.Current.IsConnected)
             {
+                if (_institutionsRemoteTable == null)
+                    await Initialize();
+
                 // pull down all latest changes
                 await _institutionsRemoteTable.PullAsync("allInstitutions", _institutionsRemoteTable.IncludeTotalCount());
-                _remoteInstitutionsCache = await _institutionsRemoteTable.ToListAsync();
 
                 // save in the cross settings the last time of institutions were updated
                 DateOfLastTimeInstitutionsUpdate = DateTime.UtcNow;
             }
         }
 
-        public IList<RemoteInstitution> GetInstitutions()
+        public async Task<List<RemoteInstitution>> GetCachedInstitutionsAsync()
         {
-            return _remoteInstitutionsCache;
+            if (_institutionsRemoteTable == null)
+                await Initialize();
+
+            return await _institutionsRemoteTable.ToListAsync();
         }
     }
 }

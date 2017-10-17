@@ -152,12 +152,12 @@ namespace dona.Forms.ViewModels
 
         private async Task Donate_Handler()
         {
+            IsDonating = true;
+            Donate.ChangeCanExecute();
+
             var ok = await UserDialogs.Instance.ConfirmAsync($"Está a punto de realizar una donación de ${DonationAmount}.", "Confirmar donación", "Donar", "Cancelar");
             if (ok)
             {
-                IsDonating = true;
-                Donate.ChangeCanExecute();
-
                 try
                 {
                     var donationResult = await _donationsService.DonateAsync(Institution, DonationAmount);
@@ -180,6 +180,11 @@ namespace dona.Forms.ViewModels
                     IsDonating = false;
                     Donate.ChangeCanExecute();
                 }
+            }
+            else
+            {
+                IsDonating = false;
+                Donate.ChangeCanExecute();
             }
         }
 

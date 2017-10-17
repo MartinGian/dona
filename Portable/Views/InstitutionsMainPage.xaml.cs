@@ -7,12 +7,15 @@ using Xamarin.Forms.Xaml;
 using FFImageLoading.Forms;
 using dona.Forms.Model;
 using System.Threading.Tasks;
+using dona.Forms.Helpers;
 
 namespace dona.Forms.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class InstitutionsMainPage : ContentPage
     {
+        private readonly INetworkInformation _networkInformation = DependencyService.Get<INetworkInformation>();
+
         public InstitutionsMainPage()
         {
             InitializeComponent();
@@ -24,29 +27,36 @@ namespace dona.Forms.Views
         {
             base.OnAppearing();
 
-            if (BindingContext is InstitutionsMainPageViewModel vm)
+            Task.Run(() =>
             {
-                vm.InitializeInstitutionsFromLocal();
-                vm.LoadInstitutions.Execute(null);
-            }
+                if (BindingContext is InstitutionsMainPageViewModel vm)
+                {
+                    vm.InitializeInstitutionsFromLocalAsync();
+                    vm.LoadInstitutions.Execute(null);
+                }
+            });
 
 #if RELEASE
-            try
+            Task.Run(() =>
             {
-                var networkInformation = DependencyService.Get<INetworkInformation>();
-                var networkOperatorName = networkInformation.GetNetworkOperatorName();
-
-                if (!networkOperatorName.Equals("Antel", StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    UserDialogs.Instance.AlertAsync(
-                        "Parece que estas utilizando un operador que no es Antel. Las donaciones a través de Doná funcionan solamente con Antel.",
-                        "Operador incorrecto");
+                    var networkOperatorName = _networkInformation.GetNetworkOperatorName();
+                    if (!networkOperatorName.Equals("Antel", StringComparison.OrdinalIgnoreCase))
+                    {
+                        UiHelper.InvokeOnTheMainThread(() =>
+                        {
+                            UserDialogs.Instance.AlertAsync(
+                                "Parece que estas utilizando un operador que no es Antel. Las donaciones a través de Doná funcionan solamente con Antel.",
+                                "Operador incorrecto");
+                        });
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                // ignore, this is just for check and notify
-            }
+                catch (Exception)
+                {
+                    // ignore, this is just for check and notify
+                }
+            });
 #endif
 
         }
