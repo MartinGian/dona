@@ -20,11 +20,11 @@
                     Doná no aplica ningún cargo adicional ni tampoco retiene un porcentaje de las donaciones.
                 </Label>
                 <Label>
-                    Para obtener más información acerca de como funcionan las donaciones por SMS en Antel, sugerimos comunicarse directamente con atención al cliente de la institución, llamando al *611.
+                    Para obtener más información acerca de cómo funcionan las donaciones por SMS en Antel, sugerimos comunicarse directamente con atención al cliente de la institución, llamando al *611.
                 </Label>
                 <Label Text="Doné y recibí un SMS con un número, ejemplo 20171014193000" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="16" />
                 <Label>
-                    Tu donación se realizó de forma correcta. Algunas instituciones contestan el SMS de la donación con la fecha que se hizo efectiva la misma. En cualquier caso, cuando tus donaciones no se hagan efectivas por falta de saldo, recibirás un sms con el texto "El mensaje a xxxx no pudo ser enviado, por favor verifique su saldo.".
+                    Tu donación se realizó de forma correcta. Algunas instituciones contestan el SMS de la donación con la fecha en que se hizo efectiva la misma. En cualquier caso, cuando tus donaciones no se hagan efectivas por falta de saldo, recibirás un SMS con el texto "El mensaje a xxxx no pudo ser enviado, por favor verifique su saldo.".
                 </Label>
 
                 <StackLayout HorizontalOptions="CenterAndExpand" Margin="0, 10, 0, 0">
@@ -33,7 +33,7 @@
                             <TapGestureRecognizer Tapped="GoToFacebookPage"></TapGestureRecognizer>
                         </Image.GestureRecognizers>
                     </Image>
-                    <Label Text="Visita nuestra página para contactarnos" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Visitá nuestra página para contactarnos" FontAttributes="Bold" FontSize="16" />
                 </StackLayout>
             </StackLayout>
         </ScrollView>
