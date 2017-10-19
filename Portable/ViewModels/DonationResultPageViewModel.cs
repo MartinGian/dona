@@ -40,8 +40,7 @@ namespace dona.Forms.ViewModels
             CrossShare.Current.Share(new ShareMessage
             {
                 Title = "Doná Uruguay!",
-                Text = $"Acabo de donar{institutionNameOrEmpty} a través de Doná. ¡Vos también podes donar! Descargala de Google Play. Visitá nuestra página http://fb.com/donauruguay",
-                Url = "http://play.google.com/store/apps/details?id=donauruguay"
+                Text = $"Acabo de donar{institutionNameOrEmpty} a través de Doná. ¡Vos también podes donar! http://fb.com/donauruguay"
             });
         }
 
