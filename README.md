@@ -1,6 +1,7 @@
 # Doná
 
 Doná es una aplicación que tiene como principal objetivo hacer más ameno el hecho de donar dinero del saldo a instituciones sin fines de lucro asociadas con Antel. 
+
 Doná utiliza el servicio de donaciones a través de mensajes de texto de Antel para realizar las donaciones, por lo que no funciona con otras operadoras.
 
 # Tecnologías
