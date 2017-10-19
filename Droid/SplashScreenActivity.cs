@@ -2,6 +2,8 @@
 using Android.OS;
 using Android.Support.V7.App;
 using dona.Forms.Services;
+using System.Threading.Tasks;
+using Android.Content;
 
 namespace dona.Droid
 {
@@ -11,8 +13,15 @@ namespace dona.Droid
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            await InstitutionsService.Instance.Initialize();
-            StartActivity(typeof(MainActivity));
+
+            await Task.Run(async () => await InstitutionsService.Instance.Initialize());
+
+            var startActivityIntent = new Intent(this, typeof(MainActivity));
+            StartActivity(startActivityIntent);
+            Finish();
         }
+
+        // To prevent the back button from canceling the startup process
+        public override void OnBackPressed() { }
     }
 }

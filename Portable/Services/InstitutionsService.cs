@@ -17,8 +17,11 @@ namespace dona.Forms.Services
 
     public class InstitutionsService : IInstitutionsService
     {
-        public static InstitutionsService Instance => new InstitutionsService();
         private static readonly IRemoteDataService RemoteDataService = AzureDataService.Instance;
+
+        // Singleton implementation
+        public static InstitutionsService Instance => new InstitutionsService();
+        private InstitutionsService() { }
 
         public async Task Initialize()
         {
@@ -27,7 +30,7 @@ namespace dona.Forms.Services
 
         public async Task<IList<Institution>> SyncAndGetInstitutions()
         {
-            if (DateTime.UtcNow - RemoteDataService.DateOfLastTimeInstitutionsUpdate > TimeSpan.FromHours(1))
+            if (DateTime.UtcNow - RemoteDataService.DateOfLastTimeInstitutionsUpdate > TimeSpan.FromDays(1))
                 await RemoteDataService.SyncInstitutions();
 
             return await GetInstitutionsFromLocalAsync();
