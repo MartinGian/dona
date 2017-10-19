@@ -121,10 +121,6 @@ namespace dona.Forms.ViewModels
             _creditService = CreditService.Instance;
             _donationsService = new DonationsService();
 
-            CreditButtonVisible = institution.DonationInformation.DiscountsDonationFromCredit;
-            if (institution.DonationInformation.DiscountsDonationFromCredit)
-                CheckCacheCredit();
-
             AddToDonationAmount = new Command(() => DonationAmount += Institution.DonationInformation.MinimumDonation, AddDonationAmountCommandCanExecute);
             SubstractFromDonationAmount = new Command(() => DonationAmount -= Institution.DonationInformation.MinimumDonation, () => DonationAmount > Institution.DonationInformation.MinimumDonation);
             Donate = new Command(async () => await Donate_Handler(), () => !IsDonating);
@@ -136,18 +132,6 @@ namespace dona.Forms.ViewModels
             if (Credit == null) return true;
             if (Credit is UnlimitedCredit) return true;
             return DonationAmount + Institution.DonationInformation.MinimumDonation <= Credit.Amount;
-        }
-
-        private void CheckCacheCredit()
-        {
-            var credit = _creditService.GetCachedCredit();
-            if (credit != null)
-            {
-                Credit = credit;
-                CreditButtonVisible = false;
-                CreditLabelVisible = true;
-                AddToDonationAmount.ChangeCanExecute();
-            }
         }
 
         private async Task Donate_Handler()

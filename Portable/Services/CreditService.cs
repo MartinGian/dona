@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using dona.Forms.Events;
 using dona.Forms.Model;
-using Newtonsoft.Json;
-using Plugin.Messaging;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
-using dona.Forms.Exceptions;
-using System.Diagnostics;
 
 namespace dona.Forms.Services
 {
@@ -23,8 +14,7 @@ namespace dona.Forms.Services
 
         private const string GetCreditNumber = "226";
         private const string GetCreditMessage = "Saldo";
-        private static readonly TimeSpan GetCreditTimeout = TimeSpan.FromMinutes(1.5);
-        private Credit _credit;
+        private static readonly TimeSpan GetCreditTimeout = TimeSpan.FromMinutes(2);
 
         public static CreditService Instance = new CreditService();
 
@@ -37,10 +27,9 @@ namespace dona.Forms.Services
         {
             try
             {
-                var cachedCredit = GetCachedCredit();
-                if (cachedCredit != null) return cachedCredit;
-
+                Credit credit = null;
                 var manualResetEvent = new ManualResetEvent(false);
+
                 MessagingCenter.Subscribe<CreditInformationReceivedEvent>(this, "SmsMessageReceived", e =>
                 {
                     try
@@ -50,14 +39,9 @@ namespace dona.Forms.Services
                             var amount = ParseCreditMessage(e.Message);
                             if (amount.HasValue)
                             {
-                                _credit = amount.Value == -1 ? new UnlimitedCredit() : new Credit(amount.Value);
+                                credit = amount.Value == -1 ? new UnlimitedCredit() : new Credit(amount.Value);
                             }
-                            else _credit = null;
                         }
-                    }
-                    catch (Exception)
-                    {
-                        _credit = null;
                     }
                     finally
                     {
@@ -69,29 +53,19 @@ namespace dona.Forms.Services
 
                 await Task.Run(() =>
                 {
-                    if (!manualResetEvent.WaitOne(GetCreditTimeout))
-                        _credit = null;
+                    manualResetEvent.WaitOne(GetCreditTimeout);
                 });
 
-                MessagingCenter.Unsubscribe<CreditInformationReceivedEvent>(this, "SmsMessageReceived");
-
-                return _credit;
+                return credit;
             }
             catch (Exception)
             {
-                MessagingCenter.Unsubscribe<CreditInformationReceivedEvent>(this, "SmsMessageReceived");
-                throw;
+                return null;
             }
-        }
-
-        public Credit GetCachedCredit()
-        {
-            if (_credit is UnlimitedCredit) return _credit;
-
-            if (_credit != null && DateTime.Now - _credit.Date < TimeSpan.FromHours(1))
-                return _credit;
-
-            return null;
+            finally
+            {
+                MessagingCenter.Unsubscribe<CreditInformationReceivedEvent>(this, "SmsMessageReceived");
+            }
         }
 
         private static double? ParseCreditMessage(string message)

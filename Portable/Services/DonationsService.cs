@@ -1,11 +1,6 @@
-﻿using System;
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using dona.Forms.Model;
 using System.Collections.Generic;
-using dona.Forms.Exceptions;
-using Plugin.Messaging;
-using Plugin.Permissions;
 
 namespace dona.Forms.Services
 {

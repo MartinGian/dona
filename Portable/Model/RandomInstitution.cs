@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
-
-namespace dona.Forms.Model
+﻿namespace dona.Forms.Model
 {
     public class RandomInstitution : Institution
     {

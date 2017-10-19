@@ -20,12 +20,12 @@ namespace dona.Forms.Model
                 return false;
             }
 
-            return this.DonationInformation.Number.Equals(item.DonationInformation.Number);
+            return DonationInformation.Number.Equals(item.DonationInformation.Number);
         }
 
         public override int GetHashCode()
         {
-            return this.DonationInformation.Number.GetHashCode();
+            return DonationInformation.Number.GetHashCode();
         }
     }
 }
