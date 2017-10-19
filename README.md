@@ -1,14 +1,15 @@
 # Doná
 
-Doná es una aplicación que tiene como principal objetivo hacer más ameno el hecho de donar dinero del saldo a las instituciones sin fines de lucro asociadas con Antel. 
-Doná envía SMS desde su teléfono Antel para donar. 
+Doná es una aplicación que tiene como principal objetivo hacer más ameno el hecho de donar dinero del saldo a instituciones sin fines de lucro asociadas con Antel. 
 
-Por ejemplo, para donar $10 a Animales sin Hogar, envía un SMS con la palabra AMIGOS al 24200. Las donaciones son descontadas de su saldo, o sumadas a su factura de Antel, esto va a depender de Antel y de su contrato con la empresa.
+Doná utiliza el servicio de donaciones a través de mensajes de texto de Antel para realizar las donaciones, por lo que no funciona con otras operadoras.
 
 # Tecnologías
 
  - .NET
  - Xamarin Forms
+ - Azure Easy Tables
+ - Azure Blob Storage
 
 # Desarrolladores
 
